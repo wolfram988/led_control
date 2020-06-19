@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="untitled">
+    <output-path>$PROJECT_DIR$/out/artifacts/untitled</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="sample.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="windowsIcon" value="$PROJECT_DIR$/src/sample/icon.ico" />
+          </JavaFxApplicationIcons>
+        </option>
+        <option name="nativeBundle" value="exe" />
+        <option name="title" value="LEDControl" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="untitled.jar">
+        <element id="module-output" name="ledcontrol" />
+      </element>
+      <element id="library" level="project" name="arduino" />
+      <element id="library" level="project" name="jSerialComm-1.3.11" />
+      <element id="library" level="project" name="jssc" />
+    </root>
+  </artifact>
+</component>

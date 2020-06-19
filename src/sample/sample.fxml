@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane id="MainPane" alignment="center" hgap="10" prefHeight="224.0" prefWidth="429.0" stylesheets="@MainStyle.css" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="54.0" minHeight="34.0" prefHeight="38.0" />
+        <RowConstraints maxHeight="246.0" minHeight="214.0" prefHeight="230.0" />
+    </rowConstraints>
+    <children>
+        <AnchorPane prefHeight="226.0" prefWidth="429.0" styleClass="MainStyle" GridPane.rowIndex="1">
+            <children>
+                <Label layoutX="6.0" layoutY="4.0" prefHeight="17.0" prefWidth="75.0" text="COM порт" />
+                <ChoiceBox id="portsBox" fx:id="portsBox" layoutX="85.0" onMouseClicked="#onClick" prefHeight="25.0" prefWidth="85.0" />
+                <Button fx:id="connectButton" layoutX="185.0" mnemonicParsing="false" onAction="#onConnect" prefHeight="25.0" prefWidth="112.0" text="Подключиться" />
+                <Button fx:id="disconnectButton" layoutX="303.0" layoutY="2.0" mnemonicParsing="false" onAction="#onDisconnect" prefHeight="25.0" prefWidth="112.0" text="Отключиться" />
+                <Label layoutX="5.0" layoutY="34.0" prefHeight="17.0" prefWidth="75.0" text="Статус порта:" />
+                <Label fx:id="statusText" layoutX="128.0" layoutY="34.0" prefHeight="17.0" prefWidth="175.0" text="Неизвестно" />
+                <Label layoutX="6.0" layoutY="61.0" prefHeight="17.0" prefWidth="112.0" text="Режим подсветки" />
+                <ComboBox fx:id="operatingModeBox" layoutX="128.0" layoutY="57.0" prefWidth="150.0" promptText="off" />
+                <Button fx:id="applyButton" disable="true" layoutX="303.0" layoutY="172.0" mnemonicParsing="false" onAction="#onApply" prefHeight="25.0" prefWidth="112.0" text="Применить" />
+                <Slider fx:id="brightnessSlider" layoutX="128.0" layoutY="91.0" prefHeight="14.0" prefWidth="255.0" value="70.0" />
+                <Label layoutX="6.0" layoutY="89.0" prefHeight="17.0" prefWidth="85.0" text="Яркость" />
+                <Label fx:id="brightnessValueLabel" layoutX="390.0" layoutY="89.0" prefHeight="17.0" prefWidth="39.0" text="70%" />
+                <Label layoutX="5.0" layoutY="116.0" prefHeight="17.0" prefWidth="112.0" text="Цвет" />
+                <ColorPicker fx:id="colorPicker" layoutX="128.0" layoutY="112.0" prefHeight="25.0" prefWidth="150.0" />
+                <Label layoutX="5.0" layoutY="147.0" text="Перемешивание" />
+                <Slider fx:id="mixingSlider" layoutX="133.0" layoutY="149.0" max="30.0" prefHeight="14.0" prefWidth="255.0" value="7.0" />
+                <Label fx:id="mixingLabel" layoutX="390.0" layoutY="147.0" prefHeight="17.0" prefWidth="39.0" text="7" />
+                <CheckBox fx:id="smoothingCheckBox" layoutX="288.0" layoutY="116.0" mnemonicParsing="false" selected="true" text="Плавные переходы" />
+                <Label fx:id="paletteLabel" layoutX="6.0" layoutY="176.0" prefHeight="17.0" prefWidth="112.0" text="Кастомная палитра:" />
+                <ColorPicker fx:id="picker1" layoutX="128.0" layoutY="172.0" prefHeight="25.0" prefWidth="39.0" />
+                <ColorPicker fx:id="picker2" layoutX="170.0" layoutY="172.0" prefHeight="25.0" prefWidth="39.0" />
+                <ColorPicker fx:id="picker3" layoutX="216.0" layoutY="172.0" prefHeight="25.0" prefWidth="39.0" />
+                <ColorPicker fx:id="picker4" layoutX="259.0" layoutY="172.0" prefHeight="25.0" prefWidth="39.0" />
+            </children></AnchorPane>
+        <AnchorPane fx:id="mainPane" onMouseClicked="#handleClickAction" onMouseDragged="#handleMovementAction">
+            <children>
+                <Label layoutX="7.0" prefHeight="35.0" prefWidth="352.0" text="Управление подсветкой" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <Button layoutX="394.0" layoutY="10.0" mnemonicParsing="false" onAction="#onClose" prefHeight="25.0" prefWidth="25.0" text="X" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                <Button layoutX="366.0" layoutY="10.0" mnemonicParsing="false" onAction="#onHide" prefHeight="25.0" prefWidth="25.0" text="_" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="10.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</GridPane>
