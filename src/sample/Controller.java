@@ -8,9 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jssc.SerialPortList;
@@ -22,23 +19,22 @@ public class Controller {
     Arduino arduino; //ардуино
     ObservableList<String> portsList;//список доступных ком портов
     String[] serialPortArray;//массив доступных ком портов
-    String choisedPort;//выбранный порт
-    String choisedMode;//выбранный режим
-    int brightnessValue = 70;
-    int mixingValue = 7;
+    String port; //выбранный порт
+    String mode; //выбранный режим
+    int brightness = 70; //яркость
+    int mixing = 7;
     String smoothing = "L";
     boolean Custom = false;
-    Color currentColor = Color.WHITE;
+    boolean debudMode = false;
+    Color current0PaletteColor = Color.WHITE;
     Color current1PaletteColor = Color.WHITE;
     Color current2PaletteColor = Color.WHITE;
     Color current3PaletteColor = Color.WHITE;
     Color current4PaletteColor = Color.WHITE;
-    private double xOffSet = 0;
-    private double yOffSet = 0;
+
     String[] modes =
             {
                     "Off",
-                    "Lines",
                     "Solid",
                     "Rainbow",
                     "RainbowStripes",
@@ -47,11 +43,15 @@ public class Controller {
                     "Lava",
                     "Forest",
                     "Party",
-                    "CustomPalette"
+                    "1_Color",
+                    "2_Colors",
+                    "3_Colors",
+                    "4_Colors",
+                    "5_Colors"
             };
+
     String[] modes_ru = {
             "Выкл",
-            "Линии",
             "Заполнение",
             "Радуга",
             "Радужные линии",
@@ -60,35 +60,80 @@ public class Controller {
             "Лава",
             "Лес",
             "Вечеринка",
-            "Кастомная палитра"
+            "Один цвет",
+            "Два цвета",
+            "Три цвета",
+            "Четыре цвета",
+            "Пять цветов"
     };
-
     ChangeListener<String> portsBoxChangeListener = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            choisedPort = newValue;
-            applyButton.setDisable(true);
+            port = newValue;
+            //applyButton.setDisable(true);
         }
     };
+
     ChangeListener<String> modesBoxChangeListener = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-            choisedMode = t1;
-            if(modes[findId(t1,modes_ru)].equals("CustomPalette")){
-                picker1.setVisible(true);
-                picker2.setVisible(true);
-                picker3.setVisible(true);
-                picker4.setVisible(true);
-                paletteLabel.setVisible(true);
-                Custom = true;
-            }
-            else{
-                picker1.setVisible(false);
-                picker2.setVisible(false);
-                picker3.setVisible(false);
-                picker4.setVisible(false);
-                paletteLabel.setVisible(false);
-                Custom = false;
+            mode = t1;
+            switch (modes[findId(t1, modes_ru)]) {
+                case "1_Color":
+                    picker0.setVisible(true);
+                    picker1.setVisible(false);
+                    picker2.setVisible(false);
+                    picker3.setVisible(false);
+                    picker4.setVisible(false);
+                    mainColorLabel.setVisible(true);
+                    Custom = true;
+                    break;
+                case "2_Colors":
+                    picker0.setVisible(true);
+                    picker1.setVisible(true);
+                    picker2.setVisible(false);
+                    picker3.setVisible(false);
+                    picker4.setVisible(false);
+                    mainColorLabel.setVisible(true);
+                    Custom = true;
+                    break;
+                case "3_Colors":
+                    picker0.setVisible(true);
+                    picker1.setVisible(true);
+                    picker2.setVisible(true);
+                    picker3.setVisible(false);
+                    picker4.setVisible(false);
+                    mainColorLabel.setVisible(true);
+                    Custom = true;
+                    break;
+                case "4_Colors":
+                    picker0.setVisible(true);
+                    picker1.setVisible(true);
+                    picker2.setVisible(true);
+                    picker3.setVisible(true);
+                    picker4.setVisible(false);
+                    mainColorLabel.setVisible(true);
+                    Custom = true;
+                    break;
+                case "5_Colors":
+                    picker0.setVisible(true);
+                    picker1.setVisible(true);
+                    picker2.setVisible(true);
+                    picker3.setVisible(true);
+                    picker4.setVisible(true);
+                    mainColorLabel.setVisible(true);
+                    Custom = true;
+                    break;
+                default:
+                    picker0.setVisible(false);
+                    picker1.setVisible(false);
+                    picker2.setVisible(false);
+                    picker3.setVisible(false);
+                    picker4.setVisible(false);
+                    mainColorLabel.setVisible(false);
+                    Custom = false;
+
+                    break;
             }
         }
     };
@@ -96,13 +141,13 @@ public class Controller {
         @Override
         public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
             brightnessValueLabel.setText(t1.intValue()+"%");
-            brightnessValue = (t1.intValue());
+            brightness = (t1.intValue());
         }
     };
-    EventHandler<ActionEvent> colorPickerListener = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> colorPicker0Listener = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            currentColor = colorPicker.getValue();
+            current0PaletteColor = picker0.getValue();
         }
     };
     EventHandler<ActionEvent> colorPicker1Listener = new EventHandler<ActionEvent>() {
@@ -133,7 +178,7 @@ public class Controller {
         @Override
         public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
             mixingLabel.setText(t1.intValue()+"");
-            mixingValue = t1.intValue();
+            mixing = t1.intValue();
 
         }
     };
@@ -152,6 +197,9 @@ public class Controller {
     private ChoiceBox portsBox;
 
     @FXML
+    private Label mainColorLabel;
+
+    @FXML
     private Label statusText;
 
     @FXML
@@ -167,9 +215,6 @@ public class Controller {
     private Label brightnessValueLabel;
 
     @FXML
-    private ColorPicker colorPicker;
-
-    @FXML
     private Button disconnectButton;
 
     @FXML
@@ -180,6 +225,9 @@ public class Controller {
 
     @FXML
     private CheckBox smoothingCheckBox;
+
+    @FXML
+    private ColorPicker picker0;
 
     @FXML
     private ColorPicker picker1;
@@ -194,12 +242,6 @@ public class Controller {
     private ColorPicker picker4;
 
     @FXML
-    private Label paletteLabel;
-
-    @FXML
-    private AnchorPane mainPane;
-
-    @FXML
     private void initialize(){
         serialPortArray = SerialPortList.getPortNames();
         portsBox.getSelectionModel().selectedItemProperty().addListener(portsBoxChangeListener);
@@ -208,8 +250,10 @@ public class Controller {
         portsBox.setItems(FXCollections.observableArrayList(SerialPortList.getPortNames()));
         brightnessSlider.valueProperty().addListener(brightnessSliderChangeListener);
         mixingSlider.valueProperty().addListener(mixingSliderChangeListener);
-        colorPicker.setOnAction(colorPickerListener);
+        //colorPicker_main.setOnAction(colorPickerListener);
         smoothingCheckBox.setOnAction(smoothingCheckBoxListener);
+        picker0.setVisible(false);
+        picker0.setOnAction(colorPicker0Listener);
         picker1.setVisible(false);
         picker1.setOnAction(colorPicker1Listener);
         picker2.setVisible(false);
@@ -218,26 +262,13 @@ public class Controller {
         picker3.setOnAction(colorPicker3Listener);
         picker4.setVisible(false);
         picker4.setOnAction(colorPicker4Listener);
-        paletteLabel.setVisible(false);
-    }
-    @FXML
-    protected void handleClickAction(MouseEvent event){
-        Stage stage = (Stage) mainPane.getScene().getWindow();
-        xOffSet = stage.getX() - event.getScreenX();
-        yOffSet = stage.getY() - event.getScreenY();
-    }
-    @FXML
-    protected void handleMovementAction(MouseEvent event){
-        Stage stage = (Stage) mainPane.getScene().getWindow();
-        stage.setX(event.getScreenX() + xOffSet);
-        stage.setY(event.getScreenY() + yOffSet);
-
+        mainColorLabel.setVisible(false);
     }
 
-    public void onConnect(ActionEvent actionEvent) {
+    public void onConnect() {
 
         serialPortArray = SerialPortList.getPortNames();
-        arduino = new Arduino(choisedPort, 9600);
+        arduino = new Arduino(port, 9600);
         if (arduino.openConnection()){
 
             try {
@@ -258,7 +289,7 @@ public class Controller {
     }
 
 
-    public void onClick(MouseEvent mouseEvent) {
+    public void onClick() {
 
         serialPortArray = SerialPortList.getPortNames();
         portsList = FXCollections.observableArrayList(serialPortArray);
@@ -266,33 +297,50 @@ public class Controller {
 
     }
 
-    public void onApply(ActionEvent actionEvent) {
+    public void onApply() {
         if(Custom){
-            arduino.serialWrite(
-                    modes[findId(choisedMode,modes_ru)]+","
-                            +brightnessValue+","
-                            +mixingValue+","
+            if(!debudMode) arduino.serialWrite(
+                    modes[findId(mode,modes_ru)]+","
+                            + brightness +","
+                            + mixing +","
                             +smoothing+","
+                            +toHEX(current0PaletteColor)+","
                             +toHEX(current1PaletteColor)+","
                             +toHEX(current2PaletteColor)+","
                             +toHEX(current3PaletteColor)+","
                             +toHEX(current4PaletteColor)
+            );
 
+            System.out.println(
+                    modes[findId(mode,modes_ru)]+","
+                    + brightness +","
+                    + mixing +","
+                    +smoothing+","
+                    +toHEX(current0PaletteColor)+","
+                    +toHEX(current1PaletteColor)+","
+                    +toHEX(current2PaletteColor)+","
+                    +toHEX(current3PaletteColor)+","
+                    +toHEX(current4PaletteColor)
             );
 
         } else if(!Custom) {
 
-            arduino.serialWrite(
-                    modes[findId(choisedMode,modes_ru)] + ","
-                            + brightnessValue + ","
-                            + mixingValue + ","
-                            + smoothing + ","
-                            + toHEX(currentColor)
+            if(!debudMode) arduino.serialWrite(
+                    modes[findId(mode,modes_ru)] + ","
+                            + brightness + ","
+                            + mixing + ","
+                            + smoothing
+            );
+            System.out.println(
+                    modes[findId(mode,modes_ru)] + ","
+                            + brightness + ","
+                            + mixing + ","
+                            + smoothing
             );
         }
     }
 
-    public void onDisconnect(ActionEvent actionEvent) {
+    public void onDisconnect() {
         arduino.closeConnection();
         applyButton.setDisable(true);
         disconnectButton.setDisable(true);
@@ -312,12 +360,12 @@ public class Controller {
         return result;
     }
 
-    public void onClose(ActionEvent actionEvent) {
+    public void onClose() {
         Stage stage = (Stage)disconnectButton.getScene().getWindow();
         stage.close();
 
     }
-    public void onHide(ActionEvent actionEvent){
+    public void onHide(){
         Stage stage = (Stage)disconnectButton.getScene().getWindow();
         stage.setIconified(true);
     }

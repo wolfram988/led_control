@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="arduino">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/arduino.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../Download/arduino.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/Downloads/arduino.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../Download/arduino.jar!/" />
     </SOURCES>
   </library>
 </component>
